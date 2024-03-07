@@ -2,13 +2,15 @@ import { CameraRoll } from '@react-native-camera-roll/camera-roll'
 import React, { useRef, useState } from 'react'
 import { View, StyleSheet, TouchableOpacity, Text } from 'react-native'
 import { Camera, useCameraDevice, useFrameProcessor } from 'react-native-vision-camera'
-import FontAwesome from 'react-native-vector-icons/FontAwesome'
-import {NativeStackScreenProps} from '@react-navigation/native-stack'
+import MaterialIcons from 'react-native-vector-icons/MaterialIcons'
+import { NativeStackScreenProps } from '@react-navigation/native-stack'
 import { Routes } from '../Routes/Routes'
+import { crop, type CropRegion } from 'vision-camera-cropper'
+import { Svg, Rect, Circle } from 'react-native-svg';
 
 type Props = NativeStackScreenProps<Routes, 'CameraScreen'>
 
-const CameraScreen = ({navigation}: Props) => {
+const CameraScreen = ({ navigation }: Props) => {
   const [cameraPosition, setCameraPosition] = useState<'front' | 'back'>('back')
   const [isRecording, setIsRecording] = useState(false)
   const [isPaused, setIsPaused] = useState(false)
@@ -17,11 +19,7 @@ const CameraScreen = ({navigation}: Props) => {
 
   const device: any = useCameraDevice(cameraPosition)
 
-  const frameProcessor = useFrameProcessor((frame) => {
-    'worklet'
-  
-    // console.log(frame)
-  }, [])
+
 
   const handleTakePhoto = async () => {
     const photo = await camera.current?.takePhoto()
@@ -34,13 +32,13 @@ const CameraScreen = ({navigation}: Props) => {
   const handleRecordVideo = async () => {
     camera.current?.startRecording({
       async onRecordingFinished(video) {
-          const path = video.path
+        const path = video.path
 
-          await CameraRoll.saveAsset(`file://${path}`, {type: 'video'})
+        await CameraRoll.saveAsset(`file://${path}`, { type: 'video' })
       },
 
       onRecordingError(error) {
-          console.log(error)
+        console.log(error)
       },
     })
 
@@ -69,6 +67,11 @@ const CameraScreen = ({navigation}: Props) => {
     navigation.navigate('QrScan')
   }
 
+  const handleCropImage = () => {
+    navigation.navigate('CropImage')
+  }
+
+
   return (
     <View style={{ flex: 1 }}>
       <Camera
@@ -79,12 +82,16 @@ const CameraScreen = ({navigation}: Props) => {
         style={StyleSheet.absoluteFill}
         video={true}
         audio={true}
-        // frameProcessor={frameProcessor}
+        onError={err => console.log(err)}
+
       />
 
-      <View style={{position: 'absolute', top: 20, right: 5, backgroundColor: 'red', borderRadius: 200, padding: 10}}>
-        <TouchableOpacity onPress={handleScanQr}>
-          <FontAwesome name='qrcode' size={22} color='#fff'/>
+      <View style={{ position: 'absolute', top: 50, right: 5,  gap: 10}}>
+        <TouchableOpacity onPress={handleScanQr} style={{ backgroundColor: 'red', borderRadius: 200, padding: 10}}>
+          <MaterialIcons name='qr-code' size={22} color='#fff' />
+        </TouchableOpacity>
+        <TouchableOpacity onPress={handleCropImage} style={{ backgroundColor: 'red', borderRadius: 200, padding: 10}}>
+          <MaterialIcons name='crop-free' size={22} color='#fff' />
         </TouchableOpacity>
       </View>
 
@@ -114,45 +121,45 @@ const CameraScreen = ({navigation}: Props) => {
         {!isRecording
           ?
           <TouchableOpacity
-          style={{
-            padding: 20,
-            borderRadius: 50,
-            backgroundColor: 'red'
-          }}
-          onPress={handleRecordVideo}
-        >
-          <Text style={{ color: '#fff', fontWeight: '500' }}>
-            Record Video
-          </Text>
-        </TouchableOpacity>
-        : 
-        <View style={{flexDirection: 'row', gap: 10}}>
-          <TouchableOpacity
-          style={{
-            padding: 20,
-            borderRadius: 50,
-            backgroundColor: 'red'
-          }}
-          onPress={isPaused ? handleResumeVideo : handlePauseVideo}
-        >
-          <Text style={{ color: '#fff', fontWeight: '500' }}>
-            {isPaused ? 'Resume' : 'Pause'}
-          </Text>
-        </TouchableOpacity>
+            style={{
+              padding: 20,
+              borderRadius: 50,
+              backgroundColor: 'red'
+            }}
+            onPress={handleRecordVideo}
+          >
+            <Text style={{ color: '#fff', fontWeight: '500' }}>
+              Record Video
+            </Text>
+          </TouchableOpacity>
+          :
+          <View style={{ flexDirection: 'row', gap: 10 }}>
+            <TouchableOpacity
+              style={{
+                padding: 20,
+                borderRadius: 50,
+                backgroundColor: 'red'
+              }}
+              onPress={isPaused ? handleResumeVideo : handlePauseVideo}
+            >
+              <Text style={{ color: '#fff', fontWeight: '500' }}>
+                {isPaused ? 'Resume' : 'Pause'}
+              </Text>
+            </TouchableOpacity>
 
-        <TouchableOpacity
-          style={{
-            padding: 20,
-            borderRadius: 50,
-            backgroundColor: 'red'
-          }}
-          onPress={handleStopVideo}
-        >
-          <Text style={{ color: '#fff', fontWeight: '500' }}>
-            Stop
-          </Text>
-        </TouchableOpacity>
-        </View>
+            <TouchableOpacity
+              style={{
+                padding: 20,
+                borderRadius: 50,
+                backgroundColor: 'red'
+              }}
+              onPress={handleStopVideo}
+            >
+              <Text style={{ color: '#fff', fontWeight: '500' }}>
+                Stop
+              </Text>
+            </TouchableOpacity>
+          </View>
         }
       </View>
     </View>

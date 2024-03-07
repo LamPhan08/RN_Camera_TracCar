@@ -3,6 +3,7 @@ import { createNativeStackNavigator } from '@react-navigation/native-stack'
 import Home from '../screens/Home';
 import CameraScreen from '../screens/CameraScreen';
 import QrScan from '../screens/QrScan';
+import CropImage from '../screens/CropImage';
 import type { Routes } from '../Routes/Routes';
 
 const Tabs = createNativeStackNavigator<Routes>();
@@ -11,8 +12,9 @@ const RootNavigation = () => {
   return (
     <Tabs.Navigator initialRouteName='Home'>
       <Tabs.Screen name='Home' component={Home}/>
-      <Tabs.Screen name='CameraScreen' component={CameraScreen}/>
-      <Tabs.Screen name='QrScan' component={QrScan}/>
+      <Tabs.Screen name='CameraScreen' component={CameraScreen} options={{headerShown: false}}/>
+      <Tabs.Screen name='QrScan' component={QrScan} options={{headerShown: false}}/>
+      <Tabs.Screen name='CropImage' component={CropImage} options={{headerShown: false}}/>
     </Tabs.Navigator>
   )
 }

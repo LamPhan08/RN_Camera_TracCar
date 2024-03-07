@@ -1,12 +1,8 @@
 import React, { useRef } from 'react'
-import { SafeAreaView, StyleSheet, Alert, AlertButton } from 'react-native'
-import { Camera, useCameraDevice, useCodeScanner,  } from 'react-native-vision-camera'
-import {NativeStackScreenProps} from '@react-navigation/native-stack'
-import { Routes } from '../Routes/Routes'
+import { SafeAreaView, StyleSheet, Alert, AlertButton, Linking } from 'react-native'
+import { Camera, useCameraDevice, useCodeScanner } from 'react-native-vision-camera'
 
-type Props = NativeStackScreenProps<Routes, 'QrScan'>
-
-const QrScan = ({navigation}: Props) => {
+const QrScan = () => {
     const device: any = useCameraDevice('back')
 
     const isShowingAlert = useRef(false)
@@ -15,6 +11,10 @@ const QrScan = ({navigation}: Props) => {
         codeTypes: ['qr'],
         onCodeScanned(codes, frame) {
             const value = codes[0].value
+
+            // console.info("codes:", codes)
+            // console.info("codes[0]:", codes[0])
+            // console.info("codes[1]:", codes[1])
 
             if (value === null) {
                 return
@@ -31,6 +31,17 @@ const QrScan = ({navigation}: Props) => {
                         isShowingAlert.current = false
                     }
                 }]
+
+                if (value?.startsWith('http')) {
+                  buttons.push({
+                    text: 'Open Url',
+                    onPress: () => {
+                      Linking.openURL(value)
+
+                      isShowingAlert.current = false
+                    }
+                  })
+                }
 
                 Alert.alert('Scanned code', value, buttons)
             }
