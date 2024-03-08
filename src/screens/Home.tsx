@@ -27,12 +27,20 @@ const Home = ({navigation}: Props): React.ReactElement => {
         // console.log(cameraPermission)
     }
 
+    const handleOpenMap = () => {
+        navigation.navigate('Map')
+    }
+
     return (
         <SafeAreaView style={{flex: 1, alignItems: 'center', justifyContent: 'center'}}>
             <Text style={{ fontSize: 20 }}>Camera</Text>
 
             <TouchableOpacity style={{ padding: 10 }} onPress={() => handleOpenCamera()}>
                 <Text>Open Camera</Text>
+            </TouchableOpacity>
+
+            <TouchableOpacity style={{ padding: 10 }} onPress={() => handleOpenMap()}>
+                <Text>Open Map</Text>
             </TouchableOpacity>
         </SafeAreaView>
     )

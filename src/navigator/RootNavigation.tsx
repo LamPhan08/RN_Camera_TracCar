@@ -5,6 +5,7 @@ import CameraScreen from '../screens/CameraScreen';
 import QrScan from '../screens/QrScan';
 import CropImage from '../screens/CropImage';
 import type { Routes } from '../Routes/Routes';
+import Map from '../screens/Map';
 
 const Tabs = createNativeStackNavigator<Routes>();
 
@@ -15,6 +16,7 @@ const RootNavigation = () => {
       <Tabs.Screen name='CameraScreen' component={CameraScreen} options={{headerShown: false}}/>
       <Tabs.Screen name='QrScan' component={QrScan} options={{headerShown: false}}/>
       <Tabs.Screen name='CropImage' component={CropImage} options={{headerShown: false}}/>
+      <Tabs.Screen name='Map' component={Map} options={{headerShown: false}}/>
     </Tabs.Navigator>
   )
 }

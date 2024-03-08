@@ -1,9 +1,10 @@
 import React, { useState, useRef, useEffect } from 'react'
 import { SafeAreaView, StyleSheet, TouchableOpacity, View, Text, Platform, Dimensions, Modal, Pressable, Image } from 'react-native'
-import { Camera, useCameraDevice, useCameraFormat, useFrameProcessor } from 'react-native-vision-camera'
+import { Camera, runAsync, useCameraDevice, useCameraFormat, useFrameProcessor } from 'react-native-vision-camera'
 import { crop, type CropRegion } from 'vision-camera-cropper'
 import { Svg, Rect,  } from 'react-native-svg'
 import { useSharedValue } from 'react-native-worklets-core'
+import { CameraRoll } from '@react-native-camera-roll/camera-roll'
 
 const CropImage = () => {
   const device: any = useCameraDevice('back')
@@ -23,6 +24,7 @@ const CropImage = () => {
   const cropRegionShared = useSharedValue<undefined|CropRegion>(undefined);
   const taken = useSharedValue(false);
   const shouldTake = useSharedValue(false);
+  const img = useSharedValue<String | undefined>('');
 
   const format = useCameraFormat(device, [
     {videoResolution: {width: 1920, height: 1080}},
@@ -105,7 +107,11 @@ const CropImage = () => {
         // setImageDataJS(result.path);
         taken.value = true;
 
-        // CameraRoll.saveAsset(`file://${result.path}`)
+        // runAsync(frame, async () => {
+        //   'worklet'
+        //    CameraRoll.saveAsset(`file://${result.path}`)
+        // })
+        img.value = result.path
       }
       shouldTake.value = false;
     }
@@ -151,16 +157,9 @@ const CropImage = () => {
     updateCropRegion();
   }, [frameWidth,frameHeight])   
   
-  // useEffect(() => {
-  //   (
-  //   //   async () => {
-  //   //     await CameraRoll.saveAsset(`file://${imageData}`, {
-  //   //   type: 'photo',
-  //   // })
-  //   //   }
-  //   console.log(imageData)
-  //   )
-  // }, [imageData])
+  useEffect(() => {
+    CameraRoll.saveAsset(`file://${img.value}`, {type: 'photo',})
+  }, [img.value])
 
   return (
     <SafeAreaView style={{ flex: 1 }}>
