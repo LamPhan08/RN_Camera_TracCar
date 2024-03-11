@@ -36,6 +36,8 @@ allprojects {
                 password = "sk.eyJ1Ijoibmd1eWVuaDgiLCJhIjoiY2x0aTlocTZjMDdvazJscDZlcThodGFnNSJ9.XY0LCJpWLUo8kja7zyFPUQ"
             }
         }
+        maven { url 'https://jitpack.io' }
+
         // ...even more repos?
     }
 }
