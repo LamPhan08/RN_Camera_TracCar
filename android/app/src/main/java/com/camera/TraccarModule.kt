@@ -19,9 +19,8 @@ public class TraccarModule(context: ReactApplicationContext) : ReactContextBaseJ
 
   @ReactMethod
   fun startTrackingService() {
-    Log.d("Traccar Module", "start")
+    Log.d("Traccar Module", reactContext.toString())
     traccarClient.startTrackingService()
-    Log.d("Traccar Module", "start tracking service")
   }
 
   @ReactMethod

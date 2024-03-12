@@ -41,13 +41,25 @@
         </intent-filter>
       </activity>
       <service
-        android:name=".TrackingService"
-        android:exported="false"
+        android:name=".traccar.TrackingService"
+        android:enabled="true"
+        android:exported="true"
         android:foregroundServiceType="location" />
-        
-        <service
-          android:name=".TrackingService$HideNotificationService"
-          android:exported="false" />        
 
+        <service
+          android:name=".traccar.TrackingService$HideNotificationService"
+          android:exported="true" />        
+          <service
+            android:name=".traccar.RunningService"
+            android:enabled="true"
+            android:exported="false" />
+        <receiver 
+            android:name=".traccar.WakefulBroadcastReceiver"
+            android:exported="true">
+            <intent-filter>
+                <action android:name="org.traccar.action.SERVICE_STARTED" />
+                <action android:name="org.traccar.action.SERVICE_STOPPED" />
+            </intent-filter>
+        </receiver>          
     </application>
 </manifest>

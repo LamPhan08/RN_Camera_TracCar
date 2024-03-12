@@ -11,8 +11,8 @@ import androidx.core.content.ContextCompat
 import com.camera.traccar.Constants.Companion.KEY_DEVICE
 import com.camera.traccar.Constants.Companion.KEY_INTERVAL
 import com.camera.traccar.Constants.Companion.KEY_URL
+import com.camera.traccar.RunningService
 import com.facebook.react.bridge.ReactApplicationContext
-import com.camera.traccar.TrackingService
 
 class TraccarClientBridge(context: ReactApplicationContext) {
 
@@ -33,12 +33,8 @@ class TraccarClientBridge(context: ReactApplicationContext) {
     try {
 
       val intent = Intent(reactContext, TrackingService::class.java)
-      Log.d(TAG, intent.toString())
       reactContext.startService(intent)
-      ContextCompat.startForegroundService(
-          reactContext,
-          Intent(reactContext, TrackingService::class.java)
-      )
+      ContextCompat.startForegroundService(reactContext, intent)
       // if (Build.VERSION.SDK_INT < Build.VERSION_CODES.S) {
       //   alarmManager.setInexactRepeating(
       //       AlarmManager.ELAPSED_REALTIME_WAKEUP,
@@ -47,12 +43,12 @@ class TraccarClientBridge(context: ReactApplicationContext) {
       //       alarmIntent
       //   )
       // }
-      Log.d(TAG, "end start tracking service")
     } catch (e: Exception) {
       Log.e(TAG, "startTrackingService: " + e.message)
     }
     Log.d(TAG, "star tracking service done")
   }
+
   fun stopTrackingService() {
     Log.i(TAG, "stop!")
     try {
@@ -82,11 +78,11 @@ class TraccarClientBridge(context: ReactApplicationContext) {
             PendingIntent.FLAG_UPDATE_CURRENT
           }
       alarmIntent = PendingIntent.getBroadcast(reactContext, 0, originalIntent, flags)
-      Log.d(TAG,"setup 2")
+      Log.d(TAG, "setup 2")
     } catch (e: Exception) {
       Log.e(TAG, "setupTrackingService: " + e.message)
     }
-    Log.d(TAG,"setup done")
+    Log.d(TAG, "setup done")
   }
 
   companion object {
