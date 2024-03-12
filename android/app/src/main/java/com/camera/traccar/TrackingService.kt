@@ -33,6 +33,7 @@ import android.os.PowerManager.WakeLock
 import android.provider.Settings
 import android.util.Log
 import androidx.core.app.NotificationCompat
+import androidx.core.app.ServiceCompat
 import androidx.core.content.ContextCompat
 
 class TrackingService : Service() {
@@ -48,7 +49,7 @@ class TrackingService : Service() {
                 } else {
                     // If earlier version channel ID is not used
                     //
-// https://developer.android.com/reference/android/support/v4/app/NotificationCompat.Builder.html#NotificationCompat.Builder(android.content.Context)
+                    // https://developer.android.com/reference/android/support/v4/app/NotificationCompat.Builder.html#NotificationCompat.Builder(android.content.Context)
                     ""
                 }
 
@@ -65,8 +66,7 @@ class TrackingService : Service() {
 
     @TargetApi(Build.VERSION_CODES.O)
     private fun createNotificationChannel(channelId: String, channelName: String): String {
-        val chan = NotificationChannel(channelId, channelName,
-NotificationManager.IMPORTANCE_NONE)
+        val chan = NotificationChannel(channelId, channelName, NotificationManager.IMPORTANCE_NONE)
         val service = getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
         service.createNotificationChannel(chan)
         return channelId
@@ -102,8 +102,7 @@ NotificationManager.IMPORTANCE_NONE)
                             .getBoolean(Constants.KEY_WAKELOCK, true)
             ) {
                 val powerManager = getSystemService(POWER_SERVICE) as PowerManager
-                wakeLock = powerManager.newWakeLock(PowerManager.PARTIAL_WAKE_LOCK,
-javaClass.name)
+                wakeLock = powerManager.newWakeLock(PowerManager.PARTIAL_WAKE_LOCK, javaClass.name)
                 wakeLock?.acquire()
             }
             trackingController = TrackingController(this)
@@ -131,6 +130,7 @@ javaClass.name)
 
     override fun onDestroy() {
         stopForeground(true)
+        ServiceCompat.stopForeground(this, ServiceCompat.STOP_FOREGROUND_REMOVE)
         Log.i(TAG, "service destroy")
         sendBroadcast(Intent(ACTION_STOPPED))
         if (wakeLock?.isHeld == true) {
@@ -185,16 +185,24 @@ javaClass.name)
 // import androidx.core.app.ServiceCompat
 // import androidx.core.content.ContextCompat
 
+
+
 // class TrackingService : Service() {
+
+
 
 //     private var wakeLock: WakeLock? = null
 //     private var trackingController: TrackingController? = null
+
+
 
 //     @SuppressLint("WakelockTimeout")
 //     override fun onCreate() {
 //         startForeground(NOTIFICATION_ID, createNotification(this))
 //         Log.i(TAG, "service create")
 //         sendBroadcast(Intent(ACTION_STARTED).setPackage(packageName))
+
+
 
 //         if (ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) ==
 //                         PackageManager.PERMISSION_GRANTED
@@ -203,7 +211,8 @@ javaClass.name)
 //                             .getBoolean(Constants.KEY_WAKELOCK, true)
 //             ) {
 //                 val powerManager = getSystemService(POWER_SERVICE) as PowerManager
-//                 wakeLock = powerManager.newWakeLock(PowerManager.PARTIAL_WAKE_LOCK, javaClass.name)
+//                 wakeLock = powerManager.newWakeLock(PowerManager.PARTIAL_WAKE_LOCK,
+// javaClass.name)
 //                 wakeLock?.acquire()
 //             }
 //             trackingController = TrackingController(this)
@@ -211,14 +220,20 @@ javaClass.name)
 //         }
 //     }
 
+
+
 //     override fun onBind(intent: Intent): IBinder? {
 //         return null
 //     }
+
+
 
 //     override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int {
 //         WakefulBroadcastReceiver.completeWakefulIntent(intent)
 //         return START_STICKY
 //     }
+
+
 
 //     override fun onDestroy() {
 //         ServiceCompat.stopForeground(this, ServiceCompat.STOP_FOREGROUND_REMOVE)
@@ -230,7 +245,11 @@ javaClass.name)
 //         trackingController?.stop()
 //     }
 
+
+
 //     companion object {
+
+
 
 //         // Explicit package name should be specified when broadcasting START/STOP notifications -
 //         // it is required for manifest-declared receiver of the status widget (when running on
@@ -242,6 +261,8 @@ javaClass.name)
 //         private val TAG = TrackingService::class.java.simpleName
 //         private const val NOTIFICATION_ID = 1
 
+
+
 //         @SuppressLint("UnspecifiedImmutableFlag")
 //         private fun createNotification(context: Context): Notification {
 //             val builder =
@@ -250,6 +271,8 @@ javaClass.name)
 //                             .setPriority(NotificationCompat.PRIORITY_LOW)
 //                             .setCategory(NotificationCompat.CATEGORY_SERVICE)
 //             val intent: Intent = Intent(Settings.ACTION_SETTINGS)
+
+
 
 // //                    .color = ContextCompat.getColor(context, R.color.primary_dark)
 //             val flags =

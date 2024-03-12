@@ -35,14 +35,6 @@ class TraccarClientBridge(context: ReactApplicationContext) {
       val intent = Intent(reactContext, TrackingService::class.java)
       reactContext.startService(intent)
       ContextCompat.startForegroundService(reactContext, intent)
-      // if (Build.VERSION.SDK_INT < Build.VERSION_CODES.S) {
-      //   alarmManager.setInexactRepeating(
-      //       AlarmManager.ELAPSED_REALTIME_WAKEUP,
-      //       interval.toLong(),
-      //       interval.toLong(),
-      //       alarmIntent
-      //   )
-      // }
     } catch (e: Exception) {
       Log.e(TAG, "startTrackingService: " + e.message)
     }

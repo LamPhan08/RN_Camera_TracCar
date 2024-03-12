@@ -25,6 +25,7 @@ public class TraccarModule(context: ReactApplicationContext) : ReactContextBaseJ
 
   @ReactMethod
   fun stopTrackingService() {
+    Log.i("TRaccarModule", "Service will be destroyed")
     traccarClient.stopTrackingService()
   }
 
