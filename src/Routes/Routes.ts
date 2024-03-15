@@ -3,5 +3,6 @@ export type Routes = {
     CameraScreen: undefined,
     QrScan: undefined,
     CropImage: undefined,
-    Map: undefined
+    Map: undefined,
+    CodeDetector: undefined
 }

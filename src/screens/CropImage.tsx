@@ -99,7 +99,7 @@ const CropImage = () => {
     'worklet'
     updateFrameSizeJS(frame.width, frame.height);
     if (taken.value == false && shouldTake.value == true && cropRegionShared.value != undefined) {
-      console.log('frame:', frame);
+      console.log('cropRegionShared:', cropRegionShared.value);
       const result = crop(frame, { cropRegion: cropRegionShared.value, saveAsFile: true, includeImageBase64: true });
       // console.log('result:', result.path);
       if (result.base64) {
@@ -252,7 +252,7 @@ const CropImage = () => {
             borderColor: '#fff',
             borderWidth: 1
           }}
-          onPress={handleTakePhoto}
+          onPress={handleTakePhoto}  
         >
           <View style={{width: 50, height: 50, backgroundColor: '#fff', borderRadius: 50}}/>
         </TouchableOpacity>

@@ -23,7 +23,9 @@
     "react-native-vector-icons": "^10.0.3",
     "react-native-vision-camera": "^3.9.1",
     "react-native-worklets-core": "^0.3.0",
-    "vision-camera-cropper": "^0.1.1"
+    "vision-camera-cropper": "^0.1.1",
+    "vision-camera-dynamsoft-barcode-reader": "^1.2.0",
+    "vision-camera-resize-plugin": "^2.1.1"
   },
   "devDependencies": {
     "@babel/core": "^7.20.0",

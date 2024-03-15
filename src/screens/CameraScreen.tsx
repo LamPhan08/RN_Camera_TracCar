@@ -1,12 +1,10 @@
 import { CameraRoll } from '@react-native-camera-roll/camera-roll'
 import React, { useRef, useState } from 'react'
 import { View, StyleSheet, TouchableOpacity, Text } from 'react-native'
-import { Camera, useCameraDevice, useFrameProcessor } from 'react-native-vision-camera'
-import MaterialIcons from 'react-native-vector-icons/MaterialIcons'
+import { Camera, useCameraDevice } from 'react-native-vision-camera'
+import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons'
 import { NativeStackScreenProps } from '@react-navigation/native-stack'
 import { Routes } from '../Routes/Routes'
-import { crop, type CropRegion } from 'vision-camera-cropper'
-import { Svg, Rect, Circle } from 'react-native-svg';
 
 type Props = NativeStackScreenProps<Routes, 'CameraScreen'>
 
@@ -71,6 +69,10 @@ const CameraScreen = ({ navigation }: Props) => {
     navigation.navigate('CropImage')
   }
 
+  const handleDetectCode = () => {
+    navigation.navigate('CodeDetector')
+  }
+
 
   return (
     <View style={{ flex: 1 }}>
@@ -88,10 +90,13 @@ const CameraScreen = ({ navigation }: Props) => {
 
       <View style={{ position: 'absolute', top: 50, right: 5,  gap: 10}}>
         <TouchableOpacity onPress={handleScanQr} style={{ backgroundColor: 'red', borderRadius: 200, padding: 10}}>
-          <MaterialIcons name='qr-code' size={22} color='#fff' />
+          <MaterialCommunityIcons name='qrcode-scan' size={22} color='#fff' />
         </TouchableOpacity>
         <TouchableOpacity onPress={handleCropImage} style={{ backgroundColor: 'red', borderRadius: 200, padding: 10}}>
-          <MaterialIcons name='crop-free' size={22} color='#fff' />
+          <MaterialCommunityIcons name='crop-landscape' size={22} color='#fff' />
+        </TouchableOpacity>
+        <TouchableOpacity onPress={handleDetectCode} style={{ backgroundColor: 'red', borderRadius: 200, padding: 10}}>
+          <MaterialCommunityIcons name='magnify-scan' size={22} color='#fff' />
         </TouchableOpacity>
       </View>
 

@@ -14,7 +14,7 @@ const screenWidth = height * PixelRatio.get();
 const screenHeight = width * PixelRatio.get();
 
 const QrScan = () => {
-  const device: any = useCameraDevice('back')
+  const device: any = useCameraDevice('back', {physicalDevices: ['wide-angle-camera']})
 
   const camera = useRef<Camera>(null)
   const isShowingBox = useSharedValue(false)
@@ -25,7 +25,13 @@ const QrScan = () => {
 
   const { props: cameraProps, highlights } = useBarcodeScanner({
     fps: 5,
-    barcodeTypes: ["qr"],
+    barcodeTypes: ["qr", "code-128", 'ean-13'],
+    regionOfInterest:{
+      x: (width - width * 0.75) / 2,
+      y: height * 0.25,
+      width: width * 0.75,
+      height: width * 0.75
+    },
     onBarcodeScanned(barcodes, frame) {
       "worklet"
 
@@ -58,15 +64,15 @@ const QrScan = () => {
         // console.log(width, height)
 
         // console.log('left:', ((screenWidth - screenWidth * 0.75) / 2)  + ' / ' + left)
-        // console.log('top:', screenHeight * 0.25  + ' / ' + top)
-        // console.log('right:', ((screenWidth - screenWidth * 0.75) / 2 + screenWidth * 0.75)  + ' / ' + right)
+        // console.log('top:', top)
+        // console.log('right:', right)
         // console.log('bottom:', (screenHeight * 0.25 + screenWidth * 0.75)  + ' / ' + bottom)
 
         if (
-          left > (screenWidth - screenWidth * 0.75) / 2
-          && top > screenHeight * 0.67
-          && right < screenWidth - (screenWidth - screenWidth * 0.75) / 2
-          && bottom < screenHeight * 0.25 + screenWidth * 0.75
+          left > ((screenWidth - screenWidth * 0.75) / 2)
+          && top > screenHeight * 0.25
+          && right < (screenWidth - (screenWidth - screenWidth * 0.75) / 2) * 0.6
+          && bottom < (screenHeight * 0.25 + screenWidth * 0.75)
         ) {
           console.log(barcode.value)
           qrValue.value = barcode.value
@@ -101,7 +107,6 @@ const QrScan = () => {
       // frameProcessor={frameProcessor}
       // frameProcessorFps={5}
       />
-
 
       <Svg
         height='100%'
